@@ -1,0 +1,3 @@
+# 2.3.1 Ensure telnet client is not installed
+- name: Remove the telnet package
+  shell: dnf remove telnet -y

@@ -1,0 +1,13 @@
+# 5.1.1.7 Ensure rsyslog is not configured to receive logs from a remote client
+
+- name: Remove lines from rsyslog configuration files
+  lineinfile:
+    path: /etc/rsyslog.conf
+    regexp: "^module\\(load=\"imtcp\"\\)|^input\\(type=\"imtcp\" port=\"514\"\\)"
+    state: absent
+
+
+- name: Restart rsyslog
+  service:
+    name: rsyslog
+    state: restarted

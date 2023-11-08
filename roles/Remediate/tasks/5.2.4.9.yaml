@@ -1,0 +1,13 @@
+# 5.2.4.9 Ensure audit tools are owned by root
+
+- name: Change ownership to root for audit tools
+  file:
+    path: "{{ item }}"
+    owner: root
+  with_items:
+    - /sbin/auditctl
+    - /sbin/aureport
+    - /sbin/ausearch
+    - /sbin/autrace
+    - /sbin/auditd
+    - /sbin/augenrules

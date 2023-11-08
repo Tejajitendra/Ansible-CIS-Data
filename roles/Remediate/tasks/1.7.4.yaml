@@ -1,0 +1,8 @@
+# 1.7.4 Ensure permissions on /etc/motd are configured
+
+- name: Change ownership of /etc/motd to root:root
+  shell: chown root:root /etc/motd
+
+- name: Change permissions of /etc/motd to u-x, go-wx
+  shell: chmod u-x,go-wx /etc/motd
+

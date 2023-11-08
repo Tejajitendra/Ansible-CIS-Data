@@ -1,0 +1,8 @@
+# 1.1.8.1 Ensure /dev/shm is a separate partition
+- name: Add /dev/shm entry to /etc/fstab
+  lineinfile:
+    path: /etc/fstab
+    regexp: '^tmpfs /dev/shm tmpfs'
+    line: 'tmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime,size=2G 0 0'
+    state: present
+      

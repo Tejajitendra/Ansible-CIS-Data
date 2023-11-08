@@ -1,0 +1,17 @@
+# 4.2.6 Ensure SSH PAM is enabled
+
+- name: Set UsePAM to yes
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(?i)\s*#?UsePAM\s*'
+    line: 'UsePAM yes'
+    state: present
+
+- name: Comment out UsePAM with other settings
+  shell: |
+    grep -Pi '^\h*UsePAM\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf | grep -Evi 'yes' | while read -r l_out; do sed -ri "/^\s*UsePAM\s+/s/^/# /" "$(awk -F: '{print $1}' <<< $l_out)";done
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted

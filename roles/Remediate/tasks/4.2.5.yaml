@@ -1,0 +1,17 @@
+# 4.2.5 Ensure SSH LogLevel is appropriate
+
+- name: Set LogLevel to VERBOSE or INFO
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(?i)\s*#?LogLevel\s*'
+    line: 'LogLevel VERBOSE'
+    state: present
+
+- name: Comment out LogLevel with other settings
+  shell: |
+    grep -Pi '^\h*LogLevel\b' "/etc/ssh/sshd_config" | grep -Evi '(VERBOSE|INFO)' | while read -r l_out; do sed -ri "/^\s*LogLevel\s+/s/^/# /" "$(awk -F: '{print $1}' <<< $l_out)"; done
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted

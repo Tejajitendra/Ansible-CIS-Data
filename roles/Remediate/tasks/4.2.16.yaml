@@ -1,0 +1,17 @@
+# 4.2.16 Ensure SSH MaxAuthTries is set to 4 or less
+
+- name: Set MaxAuthTries to yes
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(?i)\s*#?MaxAuthTries\s*'
+    line: 'MaxAuthTries 4'
+    state: present
+
+- name: Comment out MaxAuthTries with other settings
+  shell: |
+    grep -Pi '^\h*maxauthtries\h+([5-9]|[1-9][0-9]+)' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf | while read -r l_out; do sed -ri "/^\s*maxauthtries\s+([5-9]|[1-9][0-9]+)/s/^/# /" "$(awk -F: '{print $1}' <<< $l_out)";done
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted

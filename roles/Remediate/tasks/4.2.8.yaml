@@ -1,0 +1,17 @@
+# 4.2.8 Ensure SSH HostbasedAuthentication is disabled 
+
+- name: Set HostbasedAuthentication to no
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(?i)\s*#?HostbasedAuthentication\s*'
+    line: 'HostbasedAuthentication no'
+    state: present
+
+- name: Comment out HostbasedAuthentication with other settings
+  shell: |
+    grep -Pi '^\h*HostbasedAuthentication\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf | grep -Evi 'no' | while read -r l_out; do sed -ri "/^\s*HostbasedAuthentication\s+/s/^/# /" "$(awk -F: '{print $1}' <<< $l_out)";done
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted

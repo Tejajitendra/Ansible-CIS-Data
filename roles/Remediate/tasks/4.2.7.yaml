@@ -1,0 +1,17 @@
+# 4.2.7 Ensure SSH root login is disabled
+
+- name: Set PermitRootLogin to no
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(?i)\s*#?PermitRootLogin\s*'
+    line: 'PermitRootLogin no'
+    state: present
+
+- name: Comment out PermitRootLogin with other settings
+  shell: |
+    grep -Pi '^\h*PermitRootLogin\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf | grep -Evi 'no' | while read -r l_out; do sed -ri "/^\s*PermitRootLogin\s+/s/^/# /" "$(awk -F: '{print $1}' <<< $l_out)";done
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted

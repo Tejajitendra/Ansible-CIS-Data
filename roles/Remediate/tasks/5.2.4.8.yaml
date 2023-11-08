@@ -1,0 +1,13 @@
+# 5.2.4.8 Ensure audit tools are 755 or more restrictive
+
+- name: Set restrictive permissions on audit tools
+  file:
+    path: "{{ item }}"
+    mode: "0755"
+  with_items:
+    - /sbin/auditctl
+    - /sbin/aureport
+    - /sbin/ausearch
+    - /sbin/autrace
+    - /sbin/auditd
+    - /sbin/augenrules

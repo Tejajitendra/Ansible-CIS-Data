@@ -1,0 +1,15 @@
+# 5.2.4.10 Ensure audit tools belong to group root
+
+- name: Set restrictive permissions on audit tools
+  file:
+    path: "{{ item }}"
+    mode: "0755"
+    owner: root
+    group: root
+  with_items:
+    - /sbin/auditctl
+    - /sbin/aureport
+    - /sbin/ausearch
+    - /sbin/autrace
+    - /sbin/auditd
+    - /sbin/augenrules

@@ -1,0 +1,12 @@
+
+- name: Remove ForwardToSyslog from journald.conf file 
+  lineinfile:
+    path: /etc/systemd/journald.conf
+    regexp: "^ForwardToSyslog=yes"
+    state: absent
+
+
+- name: Restart systemd-journald.service
+  service:
+    name: systemd-journald.service
+    state: restarted

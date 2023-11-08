@@ -1,0 +1,7 @@
+# 4.1.7 Ensure permissions on /etc/cron.d are configured 
+
+- name: Change ownership of /etc/cron.d to root:root
+  shell: chown root:root /etc/cron.d
+
+- name: Change permissions of /etc/cron.d to og-rwx
+  shell: chmod og-rwx /etc/cron.d

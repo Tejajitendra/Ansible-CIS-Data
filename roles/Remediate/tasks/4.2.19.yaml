@@ -1,0 +1,17 @@
+# 4.2.19 Ensure SSH LoginGraceTime is set to one minute or less (Automated)
+
+- name: Set LoginGraceTime to 60
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(?i)\s*#?LoginGraceTime\s*'
+    line: 'LoginGraceTime 60'
+    state: present
+
+- name: Comment out LoginGraceTime setting greater than 60
+  shell: |
+    grep -Pi '^\s*LoginGraceTime\s+(0|6[1-9]|[7-9][0-9]|[1-9][0-9][0-9]+|[^1]m)' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf | while read -r l_out; do sed -ri "/^\s*LoginGraceTime\s+(0|6[1-9]|[7-9][0-9]|[1-9][0-9][0-9]+|[^1]m)/s/^/# /" "$(awk -F: '{print $1}' <<< $l_out)";done
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted

@@ -1,0 +1,7 @@
+# 4.1.4 Ensure permissions on /etc/cron.daily are configured
+
+- name: Change ownership of /etc/cron.daily to root:root
+  shell: chown root:root /etc/cron.daily
+
+- name: Change permissions of /etc/cron.daily to og-rwx
+  shell: chmod og-rwx /etc/cron.daily

@@ -1,0 +1,3 @@
+# 2.3.3 Ensure FTP client is not installed
+- name: Remove FTP package
+  shell: dnf remove ftp -y

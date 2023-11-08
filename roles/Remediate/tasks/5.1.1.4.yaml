@@ -1,0 +1,12 @@
+# 5.1.1.4 Ensure rsyslog default file permissions are configured
+
+- name: Set FileCreateMode in rsyslog configuration
+  lineinfile:
+    path: /etc/rsyslog.conf
+    line: "$FileCreateMode 0640"
+    state: present
+
+- name: Restart rsyslog
+  service:
+    name: rsyslog
+    state: restarted

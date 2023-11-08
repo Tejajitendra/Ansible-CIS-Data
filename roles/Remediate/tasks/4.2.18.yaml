@@ -1,0 +1,17 @@
+# 4.2.18 Ensure SSH MaxSessions is set to 10 or less
+
+- name: Set MaxSessions to 10
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(?i)\s*#?MaxSessions\s*'
+    line: 'MaxSessions 10'
+    state: present
+
+- name: Comment out MaxSessions setting greater than 10
+  shell: |
+    grep -Pi '^\s*MaxSessions\s+(1[1-9]|[2-9][0-9]|[1-9][0-9][0-9]+)' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf | while read -r l_out; do sed -ri "/^\s*MaxSessions\s+(1[1-9]|[2-9][0-9]|[1-9][0-9][0-9]+)/s/^/# /" "$(awk -F: '{print $1}' <<< $l_out)";done
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted

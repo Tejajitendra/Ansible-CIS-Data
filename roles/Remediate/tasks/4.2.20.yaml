@@ -1,0 +1,24 @@
+# 4.2.20 Ensure SSH Idle Timeout Interval is configured
+
+- name: Set ClientAliveInterval to 15
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(?i)\s*#?ClientAliveInterval\s*'
+    line: 'ClientAliveInterval 15'
+    state: present
+
+- name: Set ClientAliveCountMax to 3
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(?i)\s*#?ClientAliveCountMax\s*'
+    line: 'ClientAliveCountMax 3'
+    state: present
+
+- name: Comment out ClientAliveInterval ClientAliveCountMax other settings
+  shell: |
+    grep -Pi '^\h*ClientAliveCountMax\h+0\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf | while read -r l_out; do sed -ri "/^\s*ClientAliveCountMax\s+0/s/^/# /" "$(awk -F: '{print $1}' <<<$l_out)";done
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted

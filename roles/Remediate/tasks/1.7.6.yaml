@@ -1,0 +1,6 @@
+# 1.7.6 Ensure permissions on /etc/issue.net are configured
+- name: Change ownership of /etc/issue.net to root:root
+  shell: chown root:root /etc/issue.net
+
+- name: Change permissions of /etc/issue.net to u-x, go-wx
+  shell: chmod u-x,go-wx /etc/issue.net

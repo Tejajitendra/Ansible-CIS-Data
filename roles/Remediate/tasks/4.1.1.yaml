@@ -1,0 +1,13 @@
+#4.1.1 Ensure cron daemon is installed and enabled (Automated
+
+- name: Install cronie package
+  dnf:
+    name: cronie
+    state: present
+
+- name: Enable and start the crond service
+  service:
+    name: crond
+    state: started
+    enabled: yes
+

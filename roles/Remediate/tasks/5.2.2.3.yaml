@@ -1,0 +1,19 @@
+# 5.2.2.3 Ensure system is disabled when audit logs are full
+
+- name: Set space_left_action in auditd.conf
+  lineinfile:
+    path: /etc/audit/auditd.conf
+    regexp: '^space_left_action = .*'
+    line: 'space_left_action = email'
+
+- name: Set action_mail_acct in auditd.conf
+  lineinfile:
+    path: /etc/audit/auditd.conf
+    regexp: '^action_mail_acct = .*'
+    line: 'action_mail_acct = root'
+
+- name: Set admin_space_left_action in auditd.conf
+  lineinfile:
+    path: /etc/audit/auditd.conf
+    regexp: '^admin_space_left_action = .*'
+    line: 'admin_space_left_action = halt'

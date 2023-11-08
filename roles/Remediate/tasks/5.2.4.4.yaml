@@ -1,0 +1,41 @@
+# 5.2.4.4 Ensure the audit log directory is 0750 or more restrictive
+
+#- name: Get the audit log file path
+#shell: awk -F"=" '/^\s*log_file\s*=\s*/ {print $2}' /etc/audit/auditd.conf
+#register: audit_log_file
+#changed_when: false
+#ignore_errors: yes
+
+#- name: Check if audit log file exists
+#stat:
+#path: "{{ audit_log_file.stdout }}"
+#register: audit_log_file_stat
+#ignore_errors: yes
+
+#- name: Set audit log file permissions to 750
+#command: chmod 750 "{{ audit_log_file.stdout }}"
+#when: audit_log_file_stat.stat.exists == true
+
+
+- name: Read auditd configuration file
+  command: cat /etc/audit/auditd.conf
+  register: auditd_conf_content
+  changed_when: false
+
+- name: Extract log file path
+  shell: echo "{{ auditd_conf_content.stdout }}" | grep -E "^\s*log_file\s*=" | sed -e 's/^\s*log_file\s*=\s*//'
+  register: audit_log_file
+  changed_when: false
+
+- name: Check if audit log file exists
+  stat:
+    path: "{{ audit_log_file.stdout }}"
+  register: audit_log_file_stat
+  ignore_errors: yes
+
+- name: Set audit log file permissions to 750
+  file:
+    path: "{{ audit_log_file.stdout }}"
+    mode: "0750"
+  when: audit_log_file_stat.stat.exists == true
+

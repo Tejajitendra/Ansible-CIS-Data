@@ -1,0 +1,7 @@
+# 4.1.6 Ensure permissions on /etc/cron.monthly are configured
+
+- name: Change ownership of /etc/cron.monthly to root:root
+  shell: chown root:root /etc/cron.monthly
+
+- name: Change permissions of /etc/cron.monthly to og-rwx
+  shell: chmod og-rwx /etc/cron.monthly

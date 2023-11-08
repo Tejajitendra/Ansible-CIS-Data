@@ -1,0 +1,17 @@
+# 4.2.10 Ensure SSH PermitUserEnvironment is disabled 
+
+- name: Set PermitUserEnvironment to no
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitUserEnvironment'
+    line: 'PermitUserEnvironment no'
+    state: present
+
+- name: Comment out PermitUserEnvironment with other settings
+  shell: |
+    grep -Pi '^\h*PermitUserEnvironment\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf | grep -Evi 'no' | while read -r l_out; do sed -ri "/^\s*PermitUserEnvironment\s+/s/^/# /" "$(awk -F: '{print $1}' <<<$l_out)";done
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted

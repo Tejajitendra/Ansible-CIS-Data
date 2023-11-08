@@ -1,0 +1,17 @@
+# 4.2.13 Ensure SSH AllowTcpForwarding is disabled
+
+- name: Set AllowTcpForwarding to no
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(?i)\s*#?AllowTcpForwarding\s*'
+    line: 'AllowTcpForwarding no'
+    state: present
+
+- name: Comment out AllowTcpForwarding with other settings
+  shell: |
+    grep -Pi '^\h*AllowTcpForwarding\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf | grep -Evi 'no' | while read -r l_out; do sed -ri "/^\s*AllowTcpForwarding\s+/s/^/# /" "$(awk -F: '{print $1}' <<< $l_out)";done
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted

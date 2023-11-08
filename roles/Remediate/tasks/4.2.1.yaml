@@ -1,0 +1,7 @@
+# 4.2.1 Ensure permissions on /etc/ssh/sshd_config are configured
+
+- name: Change ownership of /etc/ssh/sshd_config to root:root
+  shell: chown root:root /etc/ssh/sshd_config
+
+- name: Change permissions of /etc/ssh/sshd_config to og-rwx
+  shell: chmod u-x,go-rwx /etc/ssh/sshd_config

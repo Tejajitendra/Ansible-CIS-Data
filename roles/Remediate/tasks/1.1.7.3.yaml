@@ -1,0 +1,13 @@
+# 1.1.7.3 Ensure nosuid option set on /home partition
+
+- name: Add nosuid option to /etc/fstab
+  lineinfile:
+    path: /etc/fstab
+    regexp: '^(?i)\s*#?/home\s*'
+    line: "/home /dev/sdb ext4  defaults,rw,nosuid,nodev,noexec,relatime 0 0"
+    state: present
+
+- name: Remount /home with nosuid option
+  command: mount -o remount /home
+
+

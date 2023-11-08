@@ -1,0 +1,4 @@
+---
+
+- name: Update /etc/issue.net file
+  shell: echo "Authorized uses only. All activity may be monitored and reported." > /etc/issue.net

@@ -1,0 +1,24 @@
+# 3.4.2.6 Ensure nftables established connections are configured
+
+#- name: Enable nftables service
+  #  shell: systemctl enable nftables
+
+    #- name: Configure nftables rules
+  #  shell: systemctl is-enabled nftables.service | grep -q 'enabled' && nft add rule inet filter input ip protocol tcp ct state established accept;
+
+- name: Check if nftables.service is enabled
+  command: systemctl is-enabled nftables.service
+  register: nftables_enabled
+  changed_when: false  # Treat this command as non-changing
+
+- name: Add rule for established TCP connections
+  shell: nft add rule inet filter input ip protocol tcp ct state established accept
+  when: "'enabled' in nftables_enabled.stdout"
+
+- name: Add rule for established UDP connections
+  shell: nft add rule inet filter input ip protocol udp ct state established accept
+  when: "'enabled' in nftables_enabled.stdout"
+
+- name: Add rule for established ICMP connections
+  shell: nft add rule inet filter input ip protocol icmp ct state established accept
+  when: "'enabled' in nftables_enabled.stdout"

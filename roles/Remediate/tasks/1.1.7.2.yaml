@@ -1,0 +1,17 @@
+# 1.1.7.2 Ensure nodev option set on /home partition
+#- name: Check status from the result file
+  #  command: grep -q "1.1.7.2 Ensure nodev option set on /home partition [Failed]" {{ Result_path }}
+    #  register: status_check
+    #  ignore_errors: true
+
+- name: Add nodev option to /etc/fstab
+  lineinfile:
+    path: /etc/fstab
+    regexp: '^(?i)\s*#?/home\s*'
+    line: "/home /dev/sdb ext4  defaults,rw,nosuid,nodev,noexec,relatime 0 0"
+    state: present
+      #  when: status_check.failed
+
+- name: Remount /home with nodev option
+  command: mount -o remount /home
+#  when: status_check.failed

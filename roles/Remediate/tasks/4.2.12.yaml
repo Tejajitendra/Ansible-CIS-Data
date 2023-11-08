@@ -1,0 +1,17 @@
+# 4.2.12 Ensure SSH X11 forwarding is disabled
+
+- name: Set X11Forwarding to yes
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(?i)\s*#?X11Forwarding\s*'
+    line: 'X11Forwarding no'
+    state: present
+
+- name: Comment out X11Forwarding with other settings
+  shell: |
+    grep -Pi '^\h*X11Forwarding\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf | grep -Evi 'no' | while read -r l_out; do sed -ri "/^\s*X11Forwarding\s+/s/^/# /" "$(awk -F: '{print $1}' <<< $l_out)";done
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted

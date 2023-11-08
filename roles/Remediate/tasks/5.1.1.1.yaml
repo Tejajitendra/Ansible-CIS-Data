@@ -1,0 +1,6 @@
+# 5.1.1.1 Ensure rsyslog is installed
+
+- name: Install rsyslog package
+  dnf:
+    name: rsyslog
+    state: present

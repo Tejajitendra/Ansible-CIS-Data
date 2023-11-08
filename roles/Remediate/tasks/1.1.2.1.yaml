@@ -1,0 +1,23 @@
+# 1.1.2.1 Ensure /tmp is a separate partition
+- name: Check if /tmp is mounted at boot time
+  command: systemctl is-enabled tmp.mount
+  register: tmp_mount_enabled
+  changed_when: false
+  failed_when: false
+
+- name: Ensure /tmp is mounted at boot time
+  command: systemctl unmask tmp.mount
+  when: 
+    - tmp_mount_enabled.stdout == 'disabled'
+    - tmp_mount_enabled.stdout == 'masked'
+  ignore_errors: true
+
+- name: Configure /etc/fstab for /tmp
+  lineinfile:
+    path: /etc/fstab
+    line: "tmpfs /tmp tmpfs defaults,rw,nosuid,nodev,noexec,relatime,size=2G 0 0"
+    state: present
+  when:
+    - tmp_mount_enabled.stdout == 'disabled'
+    - tmp_mount_enabled.stdout == 'masked'
+

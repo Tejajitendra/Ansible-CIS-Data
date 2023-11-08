@@ -1,0 +1,10 @@
+# 4.2.14 Ensure system-wide crypto policy is not over-ridden
+
+- name: Modify SSHD Configuration
+  shell: |
+    sed -ri "s/^\s*(CRYPTO_POLICY\s*=.*)$/# \1/" /etc/sysconfig/sshd /etc/ssh/sshd_config.d/*.conf
+
+- name: Reload SSH service
+  service:
+    name: sshd
+    state: reloaded

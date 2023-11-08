@@ -1,0 +1,8 @@
+# 1.7.3 Ensure remote login warning banner is configured properly
+- name: Backup the original /etc/issue.net file
+  command: cp /etc/issue.net /etc/issue.net.bak
+  ignore_errors: yes  # Ignore errors if the file does not exist
+
+- name: Update /etc/issue.net file
+  shell: echo "Authorized uses only. All activity may be monitored and reported." > /etc/issue.net
+

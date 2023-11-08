@@ -1,0 +1,7 @@
+# 4.1.5 Ensure permissions on /etc/cron.weekly are configured
+
+- name: Change ownership of /etc/cron.weekly to root:root
+  shell: chown root:root /etc/cron.weekly
+
+- name: Change permissions of /etc/cron.weekly to og-rwx
+  shell: chmod og-rwx /etc/cron.weekly

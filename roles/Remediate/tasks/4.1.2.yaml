@@ -1,0 +1,7 @@
+# 4.1.2 Ensure permissions on /etc/crontab are configured
+
+- name: Change ownership of /etc/crontab to root:root
+  shell: chown root:root /etc/crontab
+
+- name: Change permissions of /etc/crontab to og-rwx
+  shell: chmod og-rwx /etc/crontab

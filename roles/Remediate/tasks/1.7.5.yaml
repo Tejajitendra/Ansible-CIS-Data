@@ -1,0 +1,6 @@
+# 1.7.5 Ensure permissions on /etc/issue are configured
+- name: Change ownership of /etc/issue to root:root
+  shell: chown root:root /etc/issue
+
+- name: Change permissions of /etc/issue to u-x, go-wx
+  shell: chmod u-x,go-wx /etc/issue

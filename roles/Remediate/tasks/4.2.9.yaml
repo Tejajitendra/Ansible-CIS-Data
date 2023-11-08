@@ -1,0 +1,17 @@
+# 4.2.9 Ensure SSH PermitEmptyPasswords is disabled
+
+- name: Set PermitEmptyPasswords to no
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(?i)\s*#?PermitEmptyPasswords\s*'
+    line: 'PermitEmptyPasswords no'
+    state: present
+
+- name: Comment out PermitEmptyPasswords with other settings
+  shell: |
+    grep -Pi '^\h*PermitEmptyPasswords\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf | grep -Evi 'no' | while read -r l_out; do sed -ri "/^\s*PermitEmptyPasswords\s+/s/^/# /" "$(awk -F: '{print $1}' <<< $l_out)";done
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted

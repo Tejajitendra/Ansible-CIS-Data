@@ -1,0 +1,13 @@
+# 4.2.15 Ensure SSH warning banner is configured (Automated)
+
+- name: Set Banner to /etc/issue.net
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(?i)\s*#?Banner\s*'
+    line: 'Banner /etc/issue.net'
+    state: present
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted

@@ -1,0 +1,1 @@
+5.2.4.4 Ensure the audit log directory is 0750 or more restrictive [Passed]

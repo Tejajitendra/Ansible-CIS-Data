@@ -1,0 +1,4 @@
+# 5.1.2.1.3 Ensure systemd-journal-remote is enabled (Manual)
+
+- name: Enabled systemd-journal-remote
+  shell: systemctl --now enable systemd-journal-upload.service

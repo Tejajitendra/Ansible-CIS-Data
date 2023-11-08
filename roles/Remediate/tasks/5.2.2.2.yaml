@@ -1,0 +1,7 @@
+# 5.2.2.2 Ensure audit logs are not automatically deleted
+
+- name: Ensure audit logs are not automatically deleted
+  lineinfile:
+    path: /etc/audit/auditd.conf
+    regexp: '^max_log_file_action = .*$'
+    line: 'max_log_file_action = keep_logs'

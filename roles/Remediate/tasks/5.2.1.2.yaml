@@ -1,0 +1,4 @@
+# 5.2.1.2 Ensure auditing for processes that start prior to auditd is enabled
+
+- name: Update the grub2 configuration with audit=1
+  shell: grubby --update-kernel ALL --args 'audit=1'

@@ -1,0 +1,14 @@
+# 5.2.4.5 Ensure audit configuration files are 640 or more restrictive
+
+- name: Find audit configuration files
+  find:
+    paths: /etc/audit/
+    patterns: "*.conf,*.rules"
+    recurse: yes
+  register: audit_config_files
+
+- name: Remove more permissive mode
+  file:
+    path: "{{ item.path }}"
+    mode: "0640"
+  with_items: "{{ audit_config_files.files }}"

@@ -1,0 +1,17 @@
+# 4.2.11 Ensure SSH IgnoreRhosts is enabled
+
+- name: Set IgnoreRhosts to yes
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^(?i)\s*#?IgnoreRhosts\s*'
+    line: 'IgnoreRhosts yes'
+    state: present
+
+- name: Comment out IgnoreRhosts with other settings
+  shell: |
+    grep -Pi '^\h*IgnoreRhosts\b' /etc/ssh/sshd_config /etc/ssh/sshd_config.d/*.conf | grep -Evi 'yes' | while read -r l_out; do sed -ri "/^\s*IgnoreRhosts\s+/s/^/# /" "$(awk -F: '{print $1}' <<< $l_out)";done
+
+- name: Restart SSH service
+  service:
+    name: sshd
+    state: restarted

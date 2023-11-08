@@ -1,0 +1,4 @@
+# 5.1.2.1.4 Ensure journald is not configured to receive logs from a remote client (Automated)
+
+- name: Disable systemd-journal-remote.socket package
+  shell: systemctl --now mask systemd-journal-remote.socket

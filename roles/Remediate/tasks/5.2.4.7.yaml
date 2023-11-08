@@ -1,0 +1,16 @@
+# 5.2.4.7 Ensure audit configuration files belong to group root
+
+- name: Find audit configuration files
+  find:
+    paths: /etc/audit/
+    patterns: "*.conf,*.rules"
+    recurse: yes
+  register: audit_config_files
+
+- name: Change ownership to root
+  file:
+    path: "{{ item.path }}"
+    group: root
+    state: file
+  with_items: "{{ audit_config_files.files }}"
+

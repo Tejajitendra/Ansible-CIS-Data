@@ -1,0 +1,6 @@
+# 5.1.2.1.1 Ensure systemd-journal-remote is installed (Manual)
+
+- name: Install systemd-journal-remote package
+  dnf:
+    name: systemd-journal-remote
+    state: present

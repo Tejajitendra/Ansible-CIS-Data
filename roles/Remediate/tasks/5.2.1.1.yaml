@@ -1,0 +1,6 @@
+# 5.2.1.1 Ensure auditd is installed
+
+- name: Install auditd
+  dnf:
+    name: audit
+    state: present

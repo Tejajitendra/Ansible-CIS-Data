@@ -1,0 +1,4 @@
+# 2.3.2 Ensure LDAP client is not installed
+
+- name: Remove the openldap-clients package
+  shell: dnf remove openldap-clients -y
