@@ -1,1 +1,22 @@
+# 5.2.4.10 Ensure audit tools belong to group root
 
+- name: Check if the status is 'Failed'in the result file
+  command: "grep -q '5.2.4.10.*\\[Failed\\]' {{ Result_path }}"
+  register: status_check
+  delegate_to: localhost
+  ignore_errors: true
+  
+- name: Set restrictive permissions on audit tools
+  file:
+    path: "{{ item }}"
+    mode: "0755"
+    owner: root
+    group: root
+  with_items:
+    - /sbin/auditctl
+    - /sbin/aureport
+    - /sbin/ausearch
+    - /sbin/autrace
+    - /sbin/auditd
+    - /sbin/augenrules
+  when: status_check.rc == 0
